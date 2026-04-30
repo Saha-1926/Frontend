@@ -38,7 +38,7 @@ const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       
       <div className='space-y-5 lg:space-y-0 lg:grid grid-cols-3 lg:gap-9'>
         
-        <div className='col-span-2 space-y-5'>
+        <div className='col-span-3 space-y-5'>
           
           <div className='flex justify-between items-center'>
             <h1 className="font-semibold">Select Address</h1>

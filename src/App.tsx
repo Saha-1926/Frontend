@@ -12,12 +12,25 @@ import { CheckOutlined } from '@mui/icons-material';
 import Checkout from './customer/pages/Checkout/Checkout';
 import Account from './customer/pages/Account/Account';
 import Order from './customer/pages/Account/Order';
+import { Routes, Route } from 'react-router-dom';
 function App() {
   return (
     <ThemeProvider theme={customTheme}>
       <div>
         <Navbar />
-       <Account />
+        <Routes>
+
+        <Route path="/" element={<Home/>}/>
+        <Route path="/products/:category" element={<Product/>}/>
+        <Route path="/review/:productId" element={<Review/>}/>
+        <Route path="/product-details/:categoryId/:name/:productId" element=
+        {<ProductDetails/>}/>
+        <Route path='/cart' element={<Cart/>}/>
+        <Route path='/checkout' element={<Checkout/>}/>
+        <Route path='/account/*' element={<Account/>}>
+        </Route>
+
+      </Routes>
       </div>
     </ThemeProvider>
   );

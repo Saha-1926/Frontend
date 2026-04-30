@@ -12,17 +12,21 @@ import SearchIcon from "@mui/icons-material/Search";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { mainCategory } from "../../../data/mainCategory";
 import CategorySheet from "./CategorySheet";
+
+
 import {
   AddShoppingCart,
   FavoriteBorder,
   Storefront
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const theme = useTheme();
   const isLarge = useMediaQuery(theme.breakpoints.up("lg"));
   const [selectedCategory, setSelectedCategory] = useState("men");
   const [showCategorySheet, setShowCategorySheet] = useState(false);
+const navigate = useNavigate()
 
 
   return (
@@ -38,7 +42,7 @@ const Navbar = () => {
                 <MenuIcon />
               </IconButton>}
 
-              <h1 className="logo cursor-pointer text-lg md:text-2xl text-primary-color whitespace-nowrap">
+              <h1 onClick={() => navigate("/")} className="logo cursor-pointer text-lg md:text-2xl text-primary-color whitespace-nowrap">
   Hana Bazzar
 </h1>
             </div>
@@ -75,14 +79,14 @@ const Navbar = () => {
            
 
             <IconButton>
-              <AddShoppingCart
+              <AddShoppingCart onClick={() => navigate("/cart")} 
                 className="text-gray-700"
                 sx={{ fontSize: 29 }}
               />
             </IconButton>
 
             {true ? (
-              <Button className="flex items-center gap-2">
+              <Button onClick={() => navigate("account/orders")}  className="flex items-center gap-2">
                 <Avatar
                   sx={{ width: 29, height: 29 }}
                   src="https://cdn.pixabay.com/photo/2015/04/15/09/28/head-723540_640.jpg"

@@ -4,8 +4,10 @@ import PricingCard from './PricingCard'
 import { LocalOffer } from '@mui/icons-material'
 import { teal } from '@mui/material/colors'
 import { Button, TextField } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {
+  const navigate = useNavigate()
 
   const [couponCode, setCouponCode] = useState("")
 
@@ -60,7 +62,7 @@ const Cart = () => {
             <PricingCard />
           </div>
 <div className='p-5'>
-  <Button
+  <Button onClick={() => navigate("/checkout")}
     fullWidth
     variant='contained'
     sx={{ py: "11px" }}
