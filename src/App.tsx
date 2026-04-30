@@ -13,6 +13,8 @@ import Checkout from './customer/pages/Checkout/Checkout';
 import Account from './customer/pages/Account/Account';
 import Order from './customer/pages/Account/Order';
 import { Routes, Route } from 'react-router-dom';
+import BecomeSeller from './customer/pages/Become Seller/BecomeSeller';
+import SellerDashboard from './seller/Pages/SellerDashboard/SellerDashboard';
 function App() {
   return (
     <ThemeProvider theme={customTheme}>
@@ -27,8 +29,10 @@ function App() {
         {<ProductDetails/>}/>
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/checkout' element={<Checkout/>}/>
-        <Route path='/account/*' element={<Account/>}>
-        </Route>
+        <Route path='/account/*' element={<Account/>}>  </Route>
+          <Route path="/become-seller" element={<BecomeSeller />} />
+      
+          <Route path="/seller" element={<SellerDashboard />} />
 
       </Routes>
       </div>

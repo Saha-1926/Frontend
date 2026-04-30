@@ -2,16 +2,13 @@ import React from 'react'
 import { Box, TextField, Button } from '@mui/material'
 import { useFormik } from 'formik'
 
-const BecomeSellerFormStep2 = ({formik}:any) => {
+const BecomeSellerFormStep2 = ({ formik }: any) => {
 
-  
-
-  return (
+    return (
     <Box className="max-w-xl mx-auto p-5">
 
       <p className="text-xl font-bold text-center pb-5">
-        Contact Details
-      </p>
+PickUp Address      </p>
 
       <form onSubmit={formik.handleSubmit} className="space-y-4">
 
@@ -50,10 +47,7 @@ const BecomeSellerFormStep2 = ({formik}:any) => {
           onChange={formik.handleChange}
         />
 
-        <Button type="submit" variant="contained" fullWidth>
-          Save Address
-        </Button>
-
+        
       </form>
     </Box>
   )

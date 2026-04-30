@@ -98,7 +98,7 @@ const navigate = useNavigate()
             )}
 
             {isLarge && (
-              <Button startIcon={<Storefront />} variant="outlined" className="whitespace-nowrap">
+              <Button onClick={() => navigate("/become-seller")} startIcon={<Storefront />} variant="outlined" className="whitespace-nowrap">
                 Become Seller
               </Button>
             )}
