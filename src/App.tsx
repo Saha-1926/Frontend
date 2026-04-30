@@ -15,6 +15,7 @@ import Order from './customer/pages/Account/Order';
 import { Routes, Route } from 'react-router-dom';
 import BecomeSeller from './customer/pages/Become Seller/BecomeSeller';
 import SellerDashboard from './seller/Pages/SellerDashboard/SellerDashboard';
+import AdminDashboard from './admin/Pages/AdminDashboard/AdminDashboard';
 function App() {
   return (
     <ThemeProvider theme={customTheme}>
@@ -34,6 +35,7 @@ function App() {
       
           <Route path="/seller" element={<SellerDashboard />} />
           <Route path="/seller/*" element={<SellerDashboard />} />
+        <Route path="/admin" element={<AdminDashboard />} />
 
       </Routes>
       </div>
