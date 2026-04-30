@@ -33,6 +33,7 @@ function App() {
           <Route path="/become-seller" element={<BecomeSeller />} />
       
           <Route path="/seller" element={<SellerDashboard />} />
+          <Route path="/seller/*" element={<SellerDashboard />} />
 
       </Routes>
       </div>
