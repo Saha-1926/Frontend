@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import AdminDrawerList from '../../Component/AdminDrawerList'
 import AdminRoutes from '../../../Routes/AdminRoutes'
-import SellersTable from '../Sellers/SellersTable'
 
 const AdminDashboard = () => {
 

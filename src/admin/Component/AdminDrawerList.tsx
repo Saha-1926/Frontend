@@ -2,7 +2,7 @@ import React from 'react'
 import DrawerListComponent from '../../component/DrawerListComponent';
 
 const menu = [
-  { name: "Dashboard", path: "/admin" },
+  { name: "Dashboard", path: "/admin/dashboard" },
   { name: "Coupons", path: "/admin/coupons" },
   { name: "Add new coupon", path: "/admin/add-coupon" },
   { name: "Deals", path: "/admin/deals" },
