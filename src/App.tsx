@@ -14,8 +14,26 @@ import { Routes, Route } from 'react-router-dom';
 import BecomeSeller from './customer/pages/Become Seller/BecomeSeller';
 import SellerDashboard from './seller/Pages/SellerDashboard/SellerDashboard';
 import AdminDashboard from './admin/Pages/Dashboard/AdminDashboard';
-
+import { useEffect } from 'react';
+import { fetchProducs } from './State/FetchProduct'
+import { useAppDispatch } from './State/Store';
+import { fetchSellerProfile } from './State/seller/SellerSlice';
+import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from './State/Store';
 function App() {
+    const { seller } = useAppSelector(store => store)
+  const navigate = useNavigate()
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+    dispatch(fetchSellerProfile(localStorage.getItem("jwt") || ""));
+  }, []);
+   useEffect(() => {
+    if (seller.profile) {
+      navigate("/seller")
+    }
+  }, [seller.profile])
+
   return (
     <ThemeProvider theme={customTheme}>
       <div>

@@ -6,6 +6,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import React from 'react';
+import { useAppDispatch } from '../../../State/Store';
+import { fetchSellerProducts } from '../../../State/seller/SellerProductSlice';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -45,7 +48,12 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
-export default function OrderTable() {
+export default function ProductTable() {
+   const dispatch = useAppDispatch();
+
+  React.useEffect(()=>{
+    dispatch(fetchSellerProducts(localStorage.getItem("jwt")))
+  },[])
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }}>
