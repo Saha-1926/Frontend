@@ -8,9 +8,12 @@ import {
 } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { uploadToCoudinary } from "../../../Util/uploadToCloudinary";
+import { createProduct } from "../../../State/seller/SellerProductSlice";
+import { useAppDispatch } from "../../../State/Store";
 
 const AddProducts = () => {
   const [uploadImage, setUploadingImage] = useState(false);
+  const dispatch = useAppDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -28,12 +31,15 @@ const AddProducts = () => {
     },
     onSubmit: (values) => {
       console.log("FINAL DATA:", values);
+            dispatch(createProduct({ request: values, jwt: localStorage.getItem("jwt") }));
+
     },
   });
 
   // ✅ IMAGE UPLOAD
   const handleImageChange = async (event: any) => {
     const file = event.target.files[0];
+
 
     if (!file) return;
 

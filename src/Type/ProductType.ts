@@ -25,3 +25,4 @@ export interface Product {
     sizes: string; // Array of strings for product sizes
     in_stock?: boolean; //
   }
+  export default Product;
