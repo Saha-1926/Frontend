@@ -20,6 +20,7 @@ import { useAppDispatch } from './State/Store';
 import { fetchSellerProfile } from './State/seller/SellerSlice';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from './State/Store';
+import Auth from './customer/Auth/Auth';
 function App() {
     const { seller } = useAppSelector(store => store)
   const navigate = useNavigate()
@@ -41,6 +42,7 @@ function App() {
         <Routes>
 
           <Route path="/" element={<Home/>}/>
+          <Route path="/auth" element={<Auth/>}/>
           <Route path="/products/:category" element={<Product/>}/>
           <Route path="/review/:productId" element={<Review/>}/>
           <Route path="/product-details/:categoryId/:name/:productId" element={<ProductDetails/>}/>

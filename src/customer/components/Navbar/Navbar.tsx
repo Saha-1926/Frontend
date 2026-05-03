@@ -12,6 +12,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { mainCategory } from "../../../data/mainCategory";
 import CategorySheet from "./CategorySheet";
+import { useNavigate } from "react-router-dom";
 
 
 import {
@@ -19,7 +20,6 @@ import {
   FavoriteBorder,
   Storefront
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const theme = useTheme();
@@ -85,7 +85,7 @@ const navigate = useNavigate()
               />
             </IconButton>
 
-            {true ? (
+            {false ? (
               <Button onClick={() => navigate("account/orders")}  className="flex items-center gap-2">
                 <Avatar
                   sx={{ width: 29, height: 29 }}
@@ -94,8 +94,9 @@ const navigate = useNavigate()
                 <h1 className="font-semibold hidden lg:block">Sahana</h1>
               </Button>
             ) : (
-              <Button variant="contained">Login</Button>
-            )}
+<Button variant="contained" onClick={() => navigate("/auth")}>
+  Login
+</Button>            )}
 
             {isLarge && (
               <Button onClick={() => navigate("/become-seller")} startIcon={<Storefront />} variant="outlined" className="whitespace-nowrap">
