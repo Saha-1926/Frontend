@@ -6,11 +6,14 @@ import authReducer from "./seller/AuthSlice";
 import sellerReducer from "./seller/SellerSlice";
 import { fetchSellerProducts } from "./seller/SellerProductSlice";
 import sellerProductReducer from "./seller/SellerProductSlice";
-
+import customerAuthReducer from "./Customer/CustomerAuthSlice";
+import cartReducer from "./Customer/CartSlice";
 const rootReducer = combineReducers({
   auth: authReducer,
   seller: sellerReducer,
   sellerProduct: sellerProductReducer,
+    customerAuth: customerAuthReducer,
+cart:cartReducer
 });
 
 const store = configureStore({

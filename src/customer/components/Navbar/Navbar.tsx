@@ -13,6 +13,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { mainCategory } from "../../../data/mainCategory";
 import CategorySheet from "./CategorySheet";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../../State/Store";
 
 
 import {
@@ -26,6 +27,7 @@ const Navbar = () => {
   const isLarge = useMediaQuery(theme.breakpoints.up("lg"));
   const [selectedCategory, setSelectedCategory] = useState("men");
   const [showCategorySheet, setShowCategorySheet] = useState(false);
+  const { customerAuth } = useAppSelector((store) => store);
 const navigate = useNavigate()
 
 
@@ -85,14 +87,15 @@ const navigate = useNavigate()
               />
             </IconButton>
 
-            {false ? (
+            {customerAuth.isLoggedIn ? (
               <Button onClick={() => navigate("account/orders")}  className="flex items-center gap-2">
                 <Avatar
                   sx={{ width: 29, height: 29 }}
                   src="https://cdn.pixabay.com/photo/2015/04/15/09/28/head-723540_640.jpg"
                 />
-                <h1 className="font-semibold hidden lg:block">Sahana</h1>
-              </Button>
+<h1 className='font-semibold hidden lg:block'>
+  {customerAuth.user?.fullName}
+</h1>              </Button>
             ) : (
 <Button variant="contained" onClick={() => navigate("/auth")}>
   Login

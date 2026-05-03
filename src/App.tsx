@@ -21,10 +21,13 @@ import { fetchSellerProfile } from './State/seller/SellerSlice';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from './State/Store';
 import Auth from './customer/Auth/Auth';
+import { fetchUserProfile } from './State/Customer/CustomerAuthSlice';
+import { useSelector } from "react-redux";
 function App() {
     const { seller } = useAppSelector(store => store)
   const navigate = useNavigate()
     const dispatch = useAppDispatch();
+    const customerAuth = useSelector((state: any) => state.customerAuth);
 
     useEffect(() => {
     dispatch(fetchSellerProfile(localStorage.getItem("jwt") || ""));
@@ -33,7 +36,15 @@ function App() {
     if (seller.profile) {
       navigate("/seller")
     }
-  }, [seller.profile])
+  }, [seller.profile]) 
+
+   useEffect(() => {
+  const jwt = customerAuth.jwt || localStorage.getItem("jwt");
+
+  if (jwt) {
+    dispatch(fetchUserProfile());
+  }
+}, [customerAuth.jwt]);
 
   return (
     <ThemeProvider theme={customTheme}>

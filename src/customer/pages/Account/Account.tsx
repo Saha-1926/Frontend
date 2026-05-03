@@ -7,6 +7,8 @@ import UserDetails from "./UserDetails";
 import Address from "./Address";
 import { Route } from "react-router-dom";
 import Order from "./Order";
+import { useAppDispatch } from "../../../State/Store";
+import { logout } from "../../../State/Customer/CustomerAuthSlice";
 const menu = [
   { name: "orders", path: "/account/orders" },
   { name: "profile", path: "/account" },
@@ -18,9 +20,13 @@ const menu = [
 const Account = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
 
   // ✅ FIX: add this function
   const handleClick = (item: any) => {
+     if (item.path === "/") {
+    dispatch(logout(navigate))
+  }
     navigate(item.path);
   };
   const Navigate = useNavigate();
