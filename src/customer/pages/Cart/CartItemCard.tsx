@@ -19,10 +19,12 @@ const CartItemCard = ({ item }: { item: CartItem }) => {
     <div className="border rounded-md relative">
 
       <div className="p-5 flex gap-3">
-
-         <div>
-        <img className='w-[90px] rounded-md' src={item.product.images[0]} alt="" />
-      </div>
+<div>
+         <img
+  className="w-[90px] rounded-md"
+  src={item.product?.images?.[0] || "https://via.placeholder.com/90"}
+  alt=""
+/></div>
 
         <div className="space-y-2">
   <h1 className="font-semibold text-lg">

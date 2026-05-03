@@ -5,6 +5,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import AdressForm from "./AddressForm";
+import AddressForm from "./AddressForm";
 import PricingCard from "../Cart/PricingCard";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
  
@@ -29,6 +30,7 @@ const Checkout = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [value, setValue] = React.useState("female");
+  const paymentGateway = "RAZORPAY"; // or "STRIPE" or whatever
 
 const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   setValue(event.target.value);
@@ -61,7 +63,7 @@ const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         value={value}
         onChange={handleChange}
       >
-        <FormControlLabel value="Razor Pay" control={<Radio />} label="Razor Pay" />
+        <FormControlLabel value="Cash on Delivery" control={<Radio />} label="Cash on Delivery" />
       </RadioGroup>
             </div>
               <PricingCard />
@@ -86,7 +88,7 @@ const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   aria-describedby="modal-modal-description"
 >
   <Box sx={style}>
-  <AdressForm/>
+  <AddressForm />
   </Box>
 </Modal>
         </div>

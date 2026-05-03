@@ -1,12 +1,20 @@
+import React from "react";
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import {
+  Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper, Button, Menu, MenuItem, Box
+} from '@mui/material';
+import { tableCellClasses } from '@mui/material/TableCell';
 
+import { useAppDispatch, useAppSelector } from "../../../State/Store";
+import {
+  fetchSellerOrders,
+  updateOrderStatus
+} from "../../../State/seller/SellerOrderSlice";
+
+import { Order, OrderItem } from "../../../Type/OrderTypes";
+
+// ✅ Styled Components
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -27,62 +35,172 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
+// ✅ Status Colors
+const orderStatus = [
+  { label: 'PENDING', color: '#FFA500' },
+  { label: 'PLACED', color: '#F5BCBA' },
+  { label: 'CONFIRMED', color: '#F5BCBA' },
+  { label: 'SHIPPED', color: '#1E90FF' },
+  { label: 'DELIVERED', color: '#32CD32' },
+  { label: 'CANCELLED', color: '#FF0000' },
 ];
 
+const orderStatusColor: any = {
+  PENDING: '#FFA500',
+  PLACED: '#F5BCBA',
+  CONFIRMED: '#F5BCBA',
+  SHIPPED: '#1E90FF',
+  DELIVERED: '#32CD32',
+  CANCELLED: '#FF0000',
+};
+
 export default function OrderTable() {
+
+  const dispatch = useAppDispatch();
+
+  // ✅ FIXED STORE ACCESS
+  const { orders, loading } = useAppSelector((store) => store.sellerOrders);
+
+  // ✅ FETCH ORDERS
+  React.useEffect(() => {
+    dispatch(fetchSellerOrders(localStorage.getItem("jwt") || ""));
+  }, [dispatch]);
+
+  // ✅ MENU STATE
+  const [anchorEl, setAnchorEl] = React.useState<{ [key: number]: HTMLElement | null }>({});
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>, orderId: number) => {
+    setAnchorEl((prev) => ({ ...prev, [orderId]: event.currentTarget }));
+  };
+
+  const handleClose = (orderId: number) => {
+    setAnchorEl((prev) => ({ ...prev, [orderId]: null }));
+  };
+
+  // ✅ UPDATE STATUS
+  const handleUpdateOrder = (orderId: number, status: string) => {
+    dispatch(updateOrderStatus({
+      jwt: localStorage.getItem("jwt") || "",
+      orderId,
+      orderStatus: status as any,
+    }));
+    handleClose(orderId);
+  };
+
+  if (loading) {
+    return <h2 className="p-5">Loading...</h2>;
+  }
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }}>
+    <>
 
-        {/* HEADER */}
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Order Id</StyledTableCell>
-            <StyledTableCell align="right">Products</StyledTableCell>
-            <StyledTableCell align="right">Shipping Address</StyledTableCell>
-            <StyledTableCell align="right">Order Status</StyledTableCell>
-            <StyledTableCell align="right">Update</StyledTableCell>
-          </TableRow>
-        </TableHead>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 700 }}>
 
-        {/* BODY */}
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              
-              {/* left aligned */}
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
+          {/* HEADER */}
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Order Id</StyledTableCell>
+              <StyledTableCell>Products</StyledTableCell>
+              <StyledTableCell>Shipping Address</StyledTableCell>
+              <StyledTableCell align="center">Order Status</StyledTableCell>
+              <StyledTableCell align="center">Update</StyledTableCell>
+            </TableRow>
+          </TableHead>
 
-              {/* IMPORTANT: align added here */}
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
+          {/* BODY */}
+          <TableBody>
+            {orders?.map((order: Order) => (
+              <StyledTableRow key={order.id}>
 
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
+                {/* Order ID */}
+                <StyledTableCell>{order.id}</StyledTableCell>
 
-            </StyledTableRow>
-          ))}
-        </TableBody>
+                {/* Products */}
+                <StyledTableCell>
+                  <div className="flex flex-col gap-3">
+                    {order.orderItems?.map((item: OrderItem) => (
+                      <div key={item.id} className="flex gap-4">
+                        <img
+                          src={item.product?.images?.[0]}
+                          alt=""
+                          className="w-20 rounded"
+                        />
+                        <div>
+                          <p><strong>{item.product?.title}</strong></p>
+                          <p>₹{item.product?.sellingPrice}</p>
+                          <p>Size: {item.size}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </StyledTableCell>
 
-      </Table>
-    </TableContainer>
+                {/* Address */}
+                <StyledTableCell>
+                  {order.shippingAddress ? (
+                    <>
+                      <p>{order.shippingAddress.name}</p>
+                      <p>
+                        {order.shippingAddress.address},{" "}
+                        {order.shippingAddress.city}
+                      </p>
+                      <p>
+                        {order.shippingAddress.state} -{" "}
+                        {order.shippingAddress.pinCode}
+                      </p>
+                      <p>Mobile: {order.shippingAddress.mobile}</p>
+                    </>
+                  ) : (
+                    "No Address"
+                  )}
+                </StyledTableCell>
+
+                {/* Status */}
+                <StyledTableCell align="center">
+                  <Box
+                    sx={{
+                      border: `1px solid ${orderStatusColor[order.orderStatus]}`,
+                      color: orderStatusColor[order.orderStatus],
+                    }}
+                    className="px-3 py-1 rounded-full text-xs inline-block"
+                  >
+                    {order.orderStatus}
+                  </Box>
+                </StyledTableCell>
+
+                {/* Update */}
+                <StyledTableCell align="center">
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={(e) => handleClick(e, order.id)}
+                  >
+                    Status
+                  </Button>
+
+                  <Menu
+                    anchorEl={anchorEl[order.id]}
+                    open={Boolean(anchorEl[order.id])}
+                    onClose={() => handleClose(order.id)}
+                  >
+                    {orderStatus.map((status) => (
+                      <MenuItem
+                        key={status.label}
+                        onClick={() => handleUpdateOrder(order.id, status.label)}
+                      >
+                        {status.label}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </StyledTableCell>
+
+              </StyledTableRow>
+            ))}
+          </TableBody>
+
+        </Table>
+      </TableContainer>
+    </>
   );
 }

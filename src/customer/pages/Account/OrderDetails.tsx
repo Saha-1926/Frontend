@@ -1,10 +1,11 @@
 import { Box, Button } from "@mui/material";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import OrderStepper from "./OrderStepper";
+import { useAppDispatch, useAppSelector } from "../../../State/Store";
+import { fetchOrderById, fetchOrderItemById } from "../../../State/Customer/OrderSlice";
 
 const OrderDetails = () => {
-  const navigate = useNavigate();
 
   const [isCanceled, setIsCanceled] = React.useState(false);
 
@@ -12,35 +13,65 @@ const OrderDetails = () => {
     setIsCanceled(true);
   };
 
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const { orderId, orderItemId } = useParams();
+
+  // ✅ FIX 1: correct state access (order → currentOrder)
+  const order = useAppSelector(store => store.orders.currentOrder);
+
+  // ✅ correct already
+  const orderItem = useAppSelector(store => store.orders.orderItem);
+
+  useEffect(() => {
+    dispatch(fetchOrderById({
+      orderId: Number(orderId),
+      jwt: localStorage.getItem("jwt") || ""
+    }));
+
+    dispatch(fetchOrderItemById({
+      orderItemId: Number(orderItemId),
+      jwt: localStorage.getItem("jwt") || ""
+    }));
+  }, [dispatch, orderId, orderItemId]);
+
   return (
     <Box className="space-y-5">
       <section className="flex flex-col gap-5 justify-center items-center">
-        
+
         <img
           className="w-[100px]"
-          src="http://res.cloudinary.com/dxoqwusir/image/upload/v1727452042/pro-ray-android-ios-cellecor-yes-original-imagydnsrany7qhy_1_m9n9t5.webp"
+          src={orderItem?.product?.images[0]}
           alt=""
         />
 
         <div className="text-sm space-y-1 text-center">
-          <h1 className="font-bold">Virani Clothing</h1>
+          <h1 className="font-bold">
+            {orderItem?.product?.seller?.businessDetails?.businessName}
+          </h1>
 
           <p>
-            Cellecor RAY 1.43" AMOLED Display | 700 NITS | AOD | BT-Calling | AI
-            Voice | Split Screen Smartwatch (Black Strap, Free Size)
+            {orderItem?.product?.title}
           </p>
 
           <p>
-            <strong>Size:</strong> M
+            <strong>Size:</strong> {orderItem?.size}
           </p>
         </div>
 
         <div>
-          <Button onClick={() => navigate(`/reviews/${5}/create`)}>
+          <Button
+            onClick={() => navigate(`/reviews/${orderItem?.id}/create`)}
+          >
             Write Review
           </Button>
         </div>
-<div><OrderStepper/></div>
+
+        <div>
+          <OrderStepper />
+        </div>
+
         <div className="space-y-5 w-full max-w-xl">
 
           {/* Delivery Address */}
@@ -48,11 +79,11 @@ const OrderDetails = () => {
             <h2 className="font-semibold mb-2">Delivery Address</h2>
 
             <p className="text-sm">
-              Zosh | 9023379136
+              {order?.shippingAddress?.name} | {order?.shippingAddress?.mobile}
             </p>
 
             <p className="text-sm text-gray-500">
-              Ambavadi choke, Banglor, karnataka - 530068
+              {order?.shippingAddress?.address}, {order?.shippingAddress?.city}, {order?.shippingAddress?.state} - {order?.shippingAddress?.pinCode}
             </p>
           </div>
 
@@ -62,20 +93,24 @@ const OrderDetails = () => {
             <div className="flex justify-between">
               <div>
                 <h2 className="font-semibold">Total Item Price</h2>
+
+                {/* ✅ FIX 2: safe calculation */}
                 <p className="text-sm text-green-600">
-                  You saved ₹199.00 on this item
+                  You saved ₹{(orderItem?.mrpPrice || 0) - (orderItem?.sellingPrice || 0)} on this item
                 </p>
               </div>
 
-              <p className="font-semibold">₹799.00</p>
+              <p className="font-semibold">
+                ₹{orderItem?.sellingPrice}
+              </p>
             </div>
 
             <div className="bg-green-50 p-3 rounded-md text-sm">
-              Paid on Razor Pay
+              Paid on Cash on Delivery
             </div>
 
             <p className="text-sm text-gray-500">
-              Sold by : Viraani Clothing
+              Sold by : {orderItem?.product?.seller?.businessDetails?.businessName}
             </p>
 
           </div>

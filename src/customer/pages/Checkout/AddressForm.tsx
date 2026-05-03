@@ -1,10 +1,37 @@
 import React from 'react'
 import { Box, TextField, Button } from '@mui/material'
 import { useFormik } from 'formik'
+import { useAppDispatch } from '../../../State/Store'
+import { createOrder } from '../../../State/Customer/OrderSlice'
+import { useNavigate } from "react-router-dom"
+const AddressForm = () => {
+const dispatch = useAppDispatch();
+const navigate = useNavigate();
+  const formik = useFormik({
+  initialValues: {
+    name: '',
+    mobile: '',
+    pinCode: '',
+    address: '',
+    city: '',
+    state: '',
+    locality: ''
+  },
 
-const BecomeSellerFormStep2 = ({formik}:any) => {
+  onSubmit: async (values) => {
+    console.log(values)
 
-  
+    const result = await dispatch(createOrder({
+      address: values,
+      jwt: localStorage.getItem("jwt") || ""
+    }))
+
+    if (result.meta.requestStatus === "fulfilled") {
+      navigate("/order-placed")
+    }
+  }
+})
+    // ✅ HANDLE SUBMIT (THIS IS THE SAVE LOGIC)
 
   return (
     <Box className="max-w-xl mx-auto p-5">
@@ -13,6 +40,7 @@ const BecomeSellerFormStep2 = ({formik}:any) => {
         Contact Details
       </p>
 
+      {/* ✅ THIS TRIGGERS onSubmit */}
       <form onSubmit={formik.handleSubmit} className="space-y-4">
 
         <TextField fullWidth name="name" label="Name"
@@ -50,7 +78,8 @@ const BecomeSellerFormStep2 = ({formik}:any) => {
           onChange={formik.handleChange}
         />
 
-        <Button type="submit" variant="contained" fullWidth>
+        {/* ✅ BUTTON TRIGGERS SUBMIT */}
+        <Button  type="submit" variant="contained" fullWidth>
           Save Address
         </Button>
 
@@ -59,4 +88,4 @@ const BecomeSellerFormStep2 = ({formik}:any) => {
   )
 }
 
-export default BecomeSellerFormStep2
+export default AddressForm;

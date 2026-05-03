@@ -23,6 +23,7 @@ import { useAppSelector } from './State/Store';
 import Auth from './customer/Auth/Auth';
 import { fetchUserProfile } from './State/Customer/CustomerAuthSlice';
 import { useSelector } from "react-redux";
+import OrderPlaced from './customer/OrderPlaced';
 function App() {
     const { seller } = useAppSelector(store => store)
   const navigate = useNavigate()
@@ -54,6 +55,7 @@ function App() {
 
           <Route path="/" element={<Home/>}/>
           <Route path="/auth" element={<Auth/>}/>
+          <Route path="/order-placed" element={<OrderPlaced/>}/>
           <Route path="/products/:category" element={<Product/>}/>
           <Route path="/review/:productId" element={<Review/>}/>
           <Route path="/product-details/:categoryId/:name/:productId" element={<ProductDetails/>}/>
