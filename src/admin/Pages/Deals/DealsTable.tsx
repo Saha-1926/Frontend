@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import {
   Table, TableBody, TableCell, tableCellClasses,
@@ -7,6 +7,11 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+import { useAppDispatch, useAppSelector } from '../../../State/Store';
+import { getAllDeals } from '../../../State/DealSlice';
+
+
+// ✅ Styled Components
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#000',
@@ -21,25 +26,33 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const initialRows = [
-  { name: 'Frozen yoghurt', image: 159, category: 6, discount: 24 },
-  { name: 'Ice cream sandwich', image: 237, category: 9, discount: 37 },
-  { name: 'Eclair', image: 262, category: 16, discount: 24 },
-];
 
 const DealsTable = () => {
 
-  const [rows, setRows] = useState(initialRows);
+  const dispatch = useAppDispatch();
 
-  const handleDelete = (index: number) => {
-    const updated = rows.filter((_, i) => i !== index);
-    setRows(updated);
+  // ✅ GET DEAL DATA FROM STORE
+  const { deals } = useAppSelector((store: any) => store.deal);
+
+  // ✅ FETCH DEALS FROM BACKEND
+  useEffect(() => {
+    dispatch(getAllDeals());
+  }, [dispatch]);
+
+  // ❌ REMOVE LOCAL STATE (NOT NEEDED)
+  // const [rows, setRows] = useState(initialRows);
+
+  // ✅ DELETE UI ONLY (no backend yet)
+  const handleDelete = (id: number) => {
+    console.log("Delete clicked for id:", id);
+    // later: dispatch(deleteDeal(id))
   };
 
   return (
     <TableContainer component={Paper}>
       <Table>
 
+        {/* HEADER */}
         <TableHead>
           <TableRow>
             <StyledTableCell>No</StyledTableCell>
@@ -51,22 +64,46 @@ const DealsTable = () => {
           </TableRow>
         </TableHead>
 
+        {/* BODY */}
         <TableBody>
-          {rows.map((row, index) => (
-            <StyledTableRow key={index}>
-              <TableCell>{row.name}</TableCell>
-              <TableCell align="right">{row.image}</TableCell>
-              <TableCell align="right">{row.category}</TableCell>
-              <TableCell align="right">{row.discount}</TableCell>
+          {deals?.map((deal: any, index: number) => (
+            <StyledTableRow key={deal.id}>
 
+              {/* Index */}
+              <TableCell>{index + 1}</TableCell>
+
+              {/* Image */}
+              <TableCell align="right">
+                <img
+                  src={deal.category?.image}
+                  alt=""
+                  className="w-16 h-16 object-cover rounded"
+                />
+              </TableCell>
+
+              {/* Category */}
+              <TableCell align="right">
+                {deal.category?.name}
+              </TableCell>
+
+              {/* Discount */}
+              <TableCell align="right">
+                {deal.discount}%
+              </TableCell>
+
+              {/* Edit */}
               <TableCell align="right">
                 <IconButton color="success">
                   <EditIcon />
                 </IconButton>
               </TableCell>
 
+              {/* Delete */}
               <TableCell align="right">
-                <IconButton color="error" onClick={() => handleDelete(index)}>
+                <IconButton
+                  color="error"
+                  onClick={() => handleDelete(deal.id)}
+                >
                   <DeleteIcon />
                 </IconButton>
               </TableCell>

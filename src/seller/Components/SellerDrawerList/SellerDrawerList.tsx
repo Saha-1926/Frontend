@@ -15,10 +15,7 @@ const menu = [
     name: "Add Product",
     path: "/seller/add-product",
   },
-  {
-    name: "Payment",
-    path: "/seller/payment",
-  },
+  
  
 ];
 

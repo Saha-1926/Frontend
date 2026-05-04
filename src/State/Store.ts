@@ -10,13 +10,22 @@ import customerAuthReducer from "./Customer/CustomerAuthSlice";
 import cartReducer from "./Customer/CartSlice";
 import ordersReducer from "./Customer/OrderSlice";
 import sellerOrdersReducer from "./seller/SellerOrderSlice";
+import homeCategoryReducer from "./adminSlice";
+import adminReducer from "./adminSlice";
+import customerReducer from "./Customer/CustomerSlice";
+import dealReducer from "./DealSlice";
 const rootReducer = combineReducers({
   auth: authReducer,
   seller: sellerReducer,
   sellerProduct: sellerProductReducer,
     customerAuth: customerAuthReducer,
+    customer:customerReducer,
 cart:cartReducer,
 orders:ordersReducer,
+homeCategory:homeCategoryReducer,
+admin:adminReducer,
+deal:dealReducer,
+
 sellerOrders:sellerOrdersReducer});
 
 const store = configureStore({

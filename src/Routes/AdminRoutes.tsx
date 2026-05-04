@@ -16,9 +16,8 @@ const AdminRoutes = () => {
     <Routes>
 
       {/* ✅ CHANGE MADE HERE (FIXED RECURSION) */}
-      <Route index element={<Dashboard />} />
-
-      <Route path='coupons' element={<Coupons />} />
+<Route index element={<Dashboard />} />
+<Route path="dashboard" element={<Dashboard />} />      <Route path='coupons' element={<Coupons />} />
       <Route path='add-coupon' element={<AddCoupon />} />
       <Route path='deals' element={<Deals />} />
       <Route path='shop-by-category' element={<ShopByCategory />} />

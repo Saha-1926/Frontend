@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import AdminDrawerList from '../../Component/AdminDrawerList'
 import AdminRoutes from '../../../Routes/AdminRoutes'
-
+import { useAppDispatch } from '../../../State/Store'
+import { useEffect } from 'react'
+import { fetchHomeCategories } from '../../../State/adminSlice'
 const AdminDashboard = () => {
 
   const [open, setOpen] = useState(true)
@@ -9,6 +11,11 @@ const AdminDashboard = () => {
   const toggleDrawer = () => {
     setOpen(!open)
   }
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchHomeCategories())
+  }, [])
 
   return (
     <div className='h-screen w-screen flex'>

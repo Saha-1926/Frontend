@@ -1,8 +1,10 @@
 import React from 'react';
 import { TextField, Button } from '@mui/material';
 import { useFormik } from 'formik';
+import { useAppDispatch } from '../../../State/Store';
 
 const CreateDeal = () => {
+  const dispatch = useAppDispatch();
 
   const formik = useFormik({
     initialValues: {

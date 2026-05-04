@@ -24,20 +24,27 @@ import Auth from './customer/Auth/Auth';
 import { fetchUserProfile } from './State/Customer/CustomerAuthSlice';
 import { useSelector } from "react-redux";
 import OrderPlaced from './customer/OrderPlaced';
+import { createHomeCategories } from './State/Customer/CustomerSlice';
+import { homeCategories } from './data/HomeCategories';
 function App() {
     const { seller } = useAppSelector(store => store)
   const navigate = useNavigate()
     const dispatch = useAppDispatch();
     const customerAuth = useSelector((state: any) => state.customerAuth);
 
+  useEffect(() => {
+    dispatch(fetchSellerProfile(localStorage.getItem("jwt") || ""))
+    dispatch(createHomeCategories(homeCategories))
+  }, [])
     useEffect(() => {
     dispatch(fetchSellerProfile(localStorage.getItem("jwt") || ""));
   }, []);
    useEffect(() => {
-    if (seller.profile) {
+    if (seller.profile && !window.location.pathname.startsWith("/admin")) {
       navigate("/seller")
     }
   }, [seller.profile]) 
+   
 
    useEffect(() => {
   const jwt = customerAuth.jwt || localStorage.getItem("jwt");
@@ -50,8 +57,7 @@ function App() {
   return (
     <ThemeProvider theme={customTheme}>
       <div>
-        <Navbar />
-        <Routes>
+{!window.location.pathname.startsWith("/admin") && <Navbar />}        <Routes>
 
           <Route path="/" element={<Home/>}/>
           <Route path="/auth" element={<Auth/>}/>

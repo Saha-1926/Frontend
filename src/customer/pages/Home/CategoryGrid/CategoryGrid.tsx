@@ -1,6 +1,9 @@
 import React from 'react'
+import { useAppSelector } from '../../../../State/Store'
 
 const CategoryGrid = () => {
+  const customer = useAppSelector(store => store.customer);
+
   return (
     <div className='grid gap-4 grid-rows-12 grid-cols-12 lg:h-[600px] px-5 lg:px-20'>
 

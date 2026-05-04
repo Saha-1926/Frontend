@@ -1,12 +1,13 @@
 import React from 'react'
 import DrawerListComponent from '../../component/DrawerListComponent';
+import Dashboard from '../Pages/Dashboard/Dashboard';
 
 const menu = [
-  { name: "Dashboard", path: "/admin/dashboard" },
-  { name: "Coupons", path: "/admin/coupons" },
+   { name: "Coupons", path: "/admin/coupons" },
   { name: "Add new coupon", path: "/admin/add-coupon" },
   { name: "Deals", path: "/admin/deals" },
   { name: "Shop BY category", path: "/admin/shop-by-category" },
+  { name: "Dashboard", path: "/admin" }
 ];
 
 const menu2 = [

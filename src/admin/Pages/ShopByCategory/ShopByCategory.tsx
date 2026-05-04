@@ -1,60 +1,100 @@
-import React from 'react';
-import { styled } from '@mui/material/styles';
-import {
-  Table, TableBody, TableCell, tableCellClasses,
-  TableContainer, TableHead, TableRow, Paper, IconButton
-} from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import * as React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { IconButton, styled } from "@mui/material";
+import { useAppSelector } from "../../../State/Store";
+import { HomeCategory } from "../../../Type/HomeCategoryType";
+import EditIcon from "@mui/icons-material/Edit";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: '#000',
-    color: '#fff',
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
     fontWeight: 600,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
   },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
+  "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
 }));
 
-const rows = [
-  { name: 'Men Wear', id: 1, image: 4, category: 'Fashion' },
-  { name: 'Women Wear', id: 2, image: 6, category: 'Fashion' },
-];
+const ShopByCategory = () => {
 
-const ShopByCategory = () => (
-  <TableContainer component={Paper}>
-    <Table>
-      <TableHead>
-        <TableRow>
-          <StyledTableCell>Name</StyledTableCell>
-          <StyledTableCell align="right">Id</StyledTableCell>
-          <StyledTableCell align="right">Image</StyledTableCell>
-          <StyledTableCell align="right">Category</StyledTableCell>
-          <StyledTableCell align="right">Update</StyledTableCell>
-        </TableRow>
-      </TableHead>
+  // ✅ CORRECT PLACE (inside component)
+  const customer = useAppSelector((store) => store.customer);
 
-      <TableBody>
-        {rows.map((row, index) => (
-          <StyledTableRow key={index}>
-            <TableCell>{row.name}</TableCell>
-            <TableCell align="right">{row.id}</TableCell>
-            <TableCell align="right">{row.image}</TableCell>
-            <TableCell align="right">{row.category}</TableCell>
-            <TableCell align="right">
-              <IconButton color="success">
-                <EditIcon />
-              </IconButton>
-            </TableCell>
-          </StyledTableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </TableContainer>
-);
+  const categories: HomeCategory[] | undefined =
+    customer.homePageData?.shopByCategories;
+
+  const [selectedCategory, setSelectedCategory] =
+    React.useState<HomeCategory>();
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = (category: HomeCategory | undefined) => () => {
+    setSelectedCategory(category);
+    setOpen(true);
+  };
+
+  const handleClose = () => setOpen(false);
+
+  return (
+    <TableContainer component={Paper}>
+      <Table>
+
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>No</StyledTableCell>
+            <StyledTableCell>Id</StyledTableCell>
+            <StyledTableCell>Image</StyledTableCell>
+            <StyledTableCell align="right">Category Id</StyledTableCell>
+            <StyledTableCell align="right">Update</StyledTableCell>
+          </TableRow>
+        </TableHead>
+
+        <TableBody>
+          {categories?.map((category: HomeCategory, index) => (
+            <StyledTableRow key={category.categoryId}>
+
+              <StyledTableCell>{index + 1}</StyledTableCell>
+
+              <StyledTableCell>{category.id}</StyledTableCell>
+
+              <StyledTableCell>
+                <img
+                  className="w-20 rounded-md"
+                  src={category.image}
+                  alt=""
+                />
+              </StyledTableCell>
+
+              <StyledTableCell align="right">
+                {category.categoryId}
+              </StyledTableCell>
+
+              <StyledTableCell align="right">
+                <IconButton onClick={handleOpen(category)}>
+                  <EditIcon className="text-orange-400 cursor-pointer" />
+                </IconButton>
+              </StyledTableCell>
+
+            </StyledTableRow>
+          ))}
+        </TableBody>
+
+      </Table>
+    </TableContainer>
+  );
+};
 
 export default ShopByCategory;
